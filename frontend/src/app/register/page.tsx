@@ -7,6 +7,7 @@ export default function Register() {
   const [userId, setUserId] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [birthday, setBirthday] = useState("");  // 生年月日用
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -17,14 +18,19 @@ export default function Register() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ user_id: userId, email, password }), 
+      body: JSON.stringify({
+        user_id: userId,
+        email,
+        password,
+        birth_date: birthday,  // 生年月日も送信
+      }),
     });
 
     const data = await res.json();
 
     if (res.ok) {
       alert("登録成功！");
-      router.push("/login"); // 登録後はログインページへ
+      router.push("/login");
     } else {
       alert(`登録失敗: ${data.detail}`);
     }
@@ -35,26 +41,19 @@ export default function Register() {
       <h2>ユーザー登録</h2>
       <form onSubmit={handleSubmit}>
         <label>ユーザーID:</label>
-        <input
-          type="text"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
-          required
-        />
+        <input type="text" value={userId} onChange={(e) => setUserId(e.target.value)} required />
 
         <label>Email:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
 
         <label>パスワード:</label>
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+
+        <label>生年月日:</label>
         <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          type="date"
+          value={birthday}
+          onChange={(e) => setBirthday(e.target.value)}
           required
         />
 
@@ -63,4 +62,5 @@ export default function Register() {
     </div>
   );
 }
+
 
